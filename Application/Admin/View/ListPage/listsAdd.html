@@ -1,0 +1,369 @@
+<include file="Public/header"/>
+<link href="__PUBLIC_ADMIN__/plugins/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__PUBLIC_ADMIN__/plugins/ueditor/1.4.3/ueditor.config.js"></script>
+<script type="text/javascript" src="__PUBLIC_ADMIN__/plugins/ueditor/1.4.3/ueditor.all.min.js"> </script>
+<script type="text/javascript" src="__PUBLIC_ADMIN__/plugins/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+<article class="page-container">
+    <form class="form form-horizontal" id="form">
+        <input type="hidden" name="id" value="{$data.id}">
+        <input type="hidden" name="pid" value="{$dataInfo.id}" />
+
+    <if condition="$Think.get.pid eq 1">
+        <!-- 分类 -->
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span> 所属分类：</label>
+            <div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+            <select name="cid" class="select">
+                    <option value="">请选择类型</option>
+                      <volist name="cateData" id="vo">
+                      <option value="{$vo.id}" <if condition="($vo.id eq $data['cid'])">selected</if> >{$vo.title}</option>
+                        </volist>
+            </select>
+                </span> </div>
+        </div>
+    </if>
+
+    <if condition="$Think.get.pid eq 4">
+      <!-- 分类 -->
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span> 所属分类：</label>
+            <div class="formControls col-xs-9 col-sm-9"> 
+            <!-- high_id是上级菜单id -->
+            <select id="high_id" name="high_id" class="select col-xs-6 col-sm-6" style="width:220px;height:31px;margin-right:10px;">
+                <option value="0">请选择高级类别</option>
+                <foreach name="high_level" item="vo">
+                    <option value="{$vo.id}" <if condition="($vo.id eq $high_id)">selected</if> >{$vo.title}</option>
+                </foreach>
+            </select>
+            <select id="cid" name="cid" onchange="get_elementary_info()" class="select col-xs-6 col-sm-6" style="width:220px;height:31px;margin-right:10px;">
+                <option value="0">请选择中级类别</option>
+                <foreach name="middle_level" item="vo">
+                    <option value="{$vo.id}" <if condition="($vo.id eq $data['cid'])">selected</if> >{$vo.title}</option>
+                </foreach>
+            </select>
+                </div>
+        </div>
+    </if>
+
+        <!-- 文本字段 -->
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2">
+            <span class="c-red">*</span> 信息标题：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <input type="text" class="input-text" name="title" value="{$data.title}">
+            </div>
+        </div>
+
+   <if condition="$dataInfo.introduce_used gt 0">
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2">
+            <span class="c-red">*</span> 信息简介：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <textarea class="textarea" name="introduce" id="introduce">{$data.introduce}</textarea>
+            </div>
+        </div>
+    </if>
+
+    <if condition="$dataInfo.content_used gt 0">
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2">
+            <span class="c-red">*</span> 内容：</label>
+            <div class="formControls col-xs-9 col-sm-9"> 
+                <textarea name="content" id="content" style="width:100%;height:400px;">{$data.content}</textarea>
+                <script type="text/javascript">var ue=UE.getEditor('content',{zIndex:1});</script>
+            </div>
+        </div>
+    </if>
+
+    <if condition="$dataInfo.pic_used gt 0">
+        <!-- 单图上传字段 -->
+        <style type="text/css">
+            #fileList{width: 210px !important;}
+            #imgPicker div{width: 56px !important;height: 22px !important;}
+        </style>
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span> 
+            图片：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <input type="hidden" name="pic_path" id="pic_path" value="{$data.pic_path}">
+                <!-- 单图上传图片 -->
+                <div class="uploader-thum-container" id="uploadimg" onClick=''>
+                    <?php if($data['pic_path'] == ''){ ?>
+                        <div id="fileList" class="uploader-list"></div>
+                        <div id="imgPicker">选择图片</div>
+                    <?php }else{ ?>
+                            <div class="file-item thumbnail upload-state-done" onClick='delUpload()'>
+                                <img src="{$data.pic_path|get_cover_url}" width="200px" height="200px"  />
+                                <div class="info">点击可删除图片</div>
+                            </div>
+                        </div>
+                        <div id="fileList" class="uploader-list" onClick='delUpload()'></div>
+                        <div id="imgPicker" style="display:none;">选择图片</div>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+    </if>
+
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2">状态：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <select name="status" id="status">
+                    <foreach name="statusArr" item="item">
+                    <option value="{$key}" <if condition="$key eq $data['status']"> selected </if>>{$item}</option>
+                    </foreach>
+                </select>
+                <span style="color:indianred">（开启后才能显示在前台）</span>
+              </div>
+        </div>
+       
+    <if condition="$Think.get.pid eq 1">
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2"> 推荐：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <select name="is_recommend" id="home">
+                    <foreach name="isRecommend" item="item">
+                    <option value="{$key}" <if condition="$key eq $data['is_recommend']"> selected </if>>{$item}</option>
+                    </foreach>
+                </select>
+                <span style="color:indianred">（推荐后显示在前台图文资讯推荐）</span>
+              </div>
+        </div>
+    </if>
+
+    <if condition="$Think.get.pid eq 3">
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2">
+             活动时间：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+            <input  name="show_time1"  type="text" onfocus="WdatePicker({maxDate:'2119-06-15 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss',skin:'twoer'})" id="logmin" class="input-text Wdate" style="width:178px;" value="{$data.show_time1}" />
+            -
+            <input type="text" name="show_time2" onfocus="WdatePicker({maxDate:'2119-06-15 23:59:59',dateFmt:'yyyy-MM-dd HH:mm:ss',skin:'twoer'})" id="logmin" class="input-text Wdate" style="width:178px;" value="{$data.show_time1}"/>&nbsp;&nbsp;&nbsp;<span class="c-red">*</span>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2"> 活动地点：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <input type="text" class="input-text" name="address" value="{$data.address}">
+              </div>
+        </div>
+    </if>
+
+
+    <if condition="$Think.get.pid neq 4">
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2"> 阅读量：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <input type="text" class="input-text" name="clicks" value="{$data.clicks}">
+              </div>
+        </div>
+    </if>
+
+    <if condition="$dataInfo.is_seo gt 0">
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span> 页面标题：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <input type="text" class="input-text" name="page_title" value="{$dataInfo.page_title}">
+              </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>SEO关键词：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <input type="text" class="input-text" name="keywords" value="{$dataInfo.keywords}">
+              </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span> 页面描述：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <input type="text" class="input-text" name="description" value="{$dataInfo.description}">
+              </div>
+        </div>
+    </if>
+
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2">排序值：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <input type="text" class="input-text" value="{$data.sort}" placeholder="" name="sort">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-9 col-sm-9 col-xs-offset-2 col-sm-offset-2">
+                <button onClick="save()" class="btn btn-secondary radius" type="button"> 提 交</button>
+            </div>
+        </div>
+  </form>
+</div>
+
+<!-- 公共js文件 -->
+<include file="Public/js" />
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLIC_ADMIN__/plugins/webuploader/0.1.5/webuploader.min.js"></script> 
+<if condition="$Think.get.pid eq 3">
+    <script type="text/javascript" src="__PUBLIC_ADMIN__/plugins/My97DatePicker/4.8/WdatePicker.js"></script> 
+</if>
+<script>
+var high_id = 0; //标识是否改变高级分类
+$('#high_id').change(function () {
+    high_id = $(this).val();
+    $.ajax({
+        type:"POST",
+        url:"{:U('get_middle_info')}",
+        data:{'high_id':high_id},
+        datatype:"text",
+        success:function(data){
+            if(data != ''){
+                $('#cid').show();
+                $('#cid').empty();
+                $('#cid').append(data);
+            }else{
+                $('#cid').empty();
+                $('#cid').hide();
+            }
+        }
+    });
+});
+
+
+//首先创建WebUploader实例：
+
+var uploader = WebUploader.create({
+    auto: true, // 选完文件后，是否自动上传
+    swf: '__PUBLIC_ADMIN__/lib/webuploader/0.1.5/Uploader.swf', // swf文件路径
+    server: '{:U("fileUpload")}', // 文件接收服务端
+    pick: '#imgPicker', // 选择文件的按钮。可选
+    // 只允许选择图片文件。
+    accept: {
+        title: 'Images',
+        extensions: 'gif,jpg,jpeg,bmp,png',
+        mimeTypes: 'image',
+    }
+});
+
+//接着监听fileQueued事件，即当有文件添加进来的时候，通过uploader.makeThumb来创建图片预览图。
+
+uploader.on( 'fileQueued', function( file ) {
+    var $list = $("#fileList"),
+        //显示文件名
+        //'<div class="info">' + file.name + '</div>'
+        $li = $(
+            '<div id="' + file.id + '" class="file-item thumbnail">' +
+                '<img>' +
+                '<div class="info">' +"点击可删除图片"+ '</div>' +
+            '</div>'
+            ),
+        $img = $li.find('img');
+
+
+    // $list为容器jQuery实例
+    $list.append( $li );
+
+    // 创建缩略图
+    uploader.makeThumb( file, function( error, src ) {
+        if ( error ) {
+            $img.replaceWith('<span>不能预览</span>');
+            return;
+        }
+
+        $img.attr( 'src', src );
+    }, 200, 200 ); //100x100为缩略图尺寸
+});
+
+//最后是上传状态提示了，当文件上传过程中, 上传成功，上传失败，上传完成都分别对应uploadProgress, uploadSuccess, uploadError, uploadComplete事件。
+
+// 文件上传过程中创建进度条实时显示。
+uploader.on( 'uploadProgress', function( file, percentage ) {
+    var $li = $( '#'+file.id ),
+        $percent = $li.find('.progress span');
+
+    // 避免重复创建
+    if ( !$percent.length ) {
+        $percent = $('<p class="progress"><span></span></p>')
+                .appendTo( $li )
+                .find('span');
+    }
+
+    $percent.css( 'width', percentage * 100 + '%' );
+});
+
+// 文件上传成功，给item添加成功class, 用样式标记上传成功。
+uploader.on( 'uploadSuccess', function( file, res ) {
+    console.log(res.filePath);//这里可以得到上传后的文件路径
+    $( '#'+file.id ).addClass('upload-state-done');
+    $('#imgPicker').css('display','none');
+    $('#uploadimg').attr('onClick','delUpload()');
+    $('#pic_path').attr('value',$.cookie('pic_path'));
+
+});
+
+// 文件上传失败，显示上传出错。
+uploader.on( 'uploadError', function( file ) {
+    var $li = $( '#'+file.id ),
+        $error = $li.find('div.error');
+
+    // 避免重复创建
+    if ( !$error.length ) {
+        $error = $('<div class="error"></div>').appendTo( $li );
+    }
+
+    $error.text('上传失败');
+});
+
+// 完成上传完了，成功或者失败，先删除进度条。
+uploader.on( 'uploadComplete', function( file ) {
+    $( '#'+file.id ).find('.progress').remove();
+});
+function delUpload(){
+    layer.confirm('要删除这张图片吗？',function(index){
+            layer.msg('删除图片中...', {icon: 16,time:1000});
+            $.ajax({
+                url: '{:U("delFileUpload")}', 
+                dataType: 'json',
+                success:function(result){
+                    if(result!='OK'){
+                        layer.alert(result, {icon: 2,title :'错误提示'});
+                    }
+                },
+                error:function(data) {
+                    console.log(data.msg);
+                },
+            });
+            $('#pic_path').attr('value','');
+            $('.thumbnail').remove();
+            $('#uploadimg').attr('onClick','');
+            $('#uploadimg2').css('display','');
+            $('#imgPicker').css('display','block');
+            layer.close(index);
+        }
+    );
+}
+</script>
+<script>
+//提交 
+function save(){
+   var id = parseInt($('input[name="id"]').val());//获取id，以改变操作反馈提示
+    var admin_title;
+    if (id>0) { admin_title = '编辑'; }
+    else{ admin_title = '添加'; }
+    layer.msg('正在'+admin_title+'...', {icon: 16,time:1000});
+    $.ajax({
+        type:'post',
+        url:"{:U('listsSave')}", 
+        data:$("#form").serialize(),
+        dataType:'json',
+        success:function(result){
+            if(result=='OK'){
+                parent.layer.msg('{$dataInfo.title}数据'+admin_title+'成功',{icon:1,time:1000});
+                parent.setTimeout("location.reload()",1000);
+                parent.layer.close(index);
+            }else{
+                layer.alert(result, {icon: 2,title :'错误提示'});
+            }
+        }
+    });
+    return false; 
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<include file="Public/header"/>
+<article class="page-container">
+    <form class="form form-horizontal" id="form">
+        <input type="hidden" name="id" value="{$data.id}">
+
+        <!-- 文本字段 -->
+        <div class="row cl">
+				<label class="form-label col-xs-2 col-sm-2">
+				<span class="c-red">*</span> 中文名称：</label>
+				<div class="formControls col-xs-9 col-sm-9">
+					<input type="text" class="input-text" name="zn_title" value="{$data.zn_title}">
+				</div>
+			</div>
+		
+		<div class="row cl">
+			<label class="form-label col-xs-2 col-sm-2">
+			<span class="c-red">*</span> 英文名称：</label>
+			<div class="formControls col-xs-9 col-sm-9">
+				<input type="text" class="input-text" name="el_title" value="{$data.el_title}">
+			</div>
+		</div>
+		
+		<div class="row cl">
+			<label class="form-label col-xs-2 col-sm-2"> 配置类型：</label>
+            <div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+            <select name="conf" class="select">
+                <foreach name="conf" item="items" key="key">
+                    <option value="{$key}" <if condition="$key eq $data['conf']"> selected </if>>{$items}</option>
+                </foreach>
+            </select>
+                </span> </div>
+		</div>
+								
+				
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2"> 配置分类：</label>
+            <div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+            <select name="confCate" class="select">
+                <foreach name="confCate" item="items" key="key">
+                    <option value="{$key}" <if condition="$key eq $data['confCate']"> selected </if>>{$items}</option>
+                </foreach>
+            </select>
+                </span> </div>
+        </div>		
+
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2"> 默认值：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <textarea class="textarea" name="default" placeholder="添加后配置的默认值, 没有请留空">{$data.default}</textarea>
+            </div>
+        </div>
+        
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2"> 可选值：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <textarea class="textarea" name="option" placeholder="单选按钮才有可选值, 不同值用英文逗号隔开, 没有请留空"">{$data.option}</textarea>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-9 col-sm-9 col-xs-offset-2 col-sm-offset-2">
+                <button onClick="save()" class="btn btn-secondary radius" type="button"> 提 交</button>
+            </div>
+        </div>
+	</form>
+</div>
+
+<!-- 公共js文件 -->
+<include file="Public/js" />
+<script>
+//提交 
+function save(){
+   var id = parseInt($('input[name="id"]').val());//获取id，以改变操作反馈提示
+    var admin_title;
+    if (id>0) { admin_title = '编辑'; }
+    else{ admin_title = '添加'; }
+    $.ajax({
+        type:'post',
+        url:"{:U('confSave')}", 
+        data:$("#form").serialize(),
+        dataType:'json',
+        success:function(result){
+            if(result=='OK'){
+                parent.layer.msg('配置管理数据'+admin_title+'成功',{icon:1,time:1000});
+                parent.setTimeout("location.reload()",1000);
+                parent.layer.close(index);
+            }else{
+                layer.alert(result, {icon: 2,title :'错误提示'});
+            }
+        }
+    });
+    return false; 
+}
+</script>
+</body>
+</html>

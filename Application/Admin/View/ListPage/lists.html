@@ -1,0 +1,274 @@
+<include file="Public/header"/>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 数据管理 <span class="c-gray en">&gt;</span> 列表页管理 - {$Think.get.title}数据<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+
+<div class="page-container">
+    <div class="text-c"> 
+        <form action="{:U('lists')}" method="get">
+            <input type="hidden" name="pid" value="{$dataInfo.id}" />
+            <input type="hidden" name="title" value="{$dataInfo.title}" />
+            发布时间范围：
+            <input type="text" name="time1" onfocus="WdatePicker({maxDate:'%y-%M-%d',skin:'twoer'})" id="logmin" class="input-text Wdate" style="width:108px;" value="{$Think.get.time1}" />
+            -
+            <input type="text" name="time2" onfocus="WdatePicker({maxDate:'%y-%M-%d',skin:'twoer'})" id="logmax" class="input-text Wdate" style="width:108px;" value="{$Think.get.time2}" />
+            <input type="text" id="wd" name="keyword" placeholder="标题" style="width:330px" class="input-text" value="{$Think.get.keyword}" />
+        <if condition="$Think.get.pid eq 1 or $Think.get.pid eq 4">
+            <!-- 分类 -->
+                <span class="select-box" style="width:260px">
+                <select name="cid" class="select">
+                        <option value="">请选择类型</option>
+                          <volist name="cateData" id="vo">
+                                <option value="{$vo.id}" <if condition="($vo.id eq $cid)">selected</if> >{$vo.id|getTitle}</option>
+                        </volist>
+                </select>
+                </span>
+        </if>
+            <button class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 筛选</button>
+        </form>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l">
+        <a href="javascript:;" onclick="delAll()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> 
+    <if condition="$Think.get.pid eq 1 or $Think.get.pid eq 4">
+        <a class="btn btn-primary radius" href="/Admin/{$Think.CONTROLLER_NAME}/category?page_id={$Think.get.pid}&title={$dataInfo.title}"> 分类管理</a>
+    </if>
+        <a class="btn btn-primary radius" onclick="show_quan('添加列表页 - {$Think.get.title}数据','/Admin/{$Think.CONTROLLER_NAME}/listsAdd?pid={$dataInfo.id}')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加列表页 - {$Think.get.title}数据</a>
+        <if condition="$Think.get.title"><a class="btn btn-primary radius" style="margin-left:4px" href="javascript:window.history.back();" title="返回"><i class="Hui-iconfont">&#xe66b;</i></a></if></span> 
+        <span class="r">共有数据：<strong>{$count}</strong> 条</span> </div>
+    <table class="table table-border table-bordered table-bg table-hover table-striped">
+        <thead>
+            <tr class="text-c">
+                <th width="15"><input type="checkbox" onclick="check_del()"></th>
+                <th width="25">ID</th>
+                <th width="100">信息标题</th>
+                <th width="50">状态</th>
+        <if condition="$Think.get.pid eq 1">
+                <th width="50">首页推荐</th>
+        </if>
+                <th width="80">发布时间</th>
+                <th width="50">排序</th>
+                <th width="100">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <empty name="data"><tr class="text-c"><td colspan="50">还没有内容哦，赶紧添加吧！</td></tr></empty>
+            <volist name="data" id="vo">
+            <tr class="text-c">
+                <td>
+                    <input type="checkbox" name="ids[]" value="{$vo.id}">
+                </td>
+                <td>{$vo.id}</td>
+                <td><a title="点击修改" href="javascript:;" onclick="myTitle({$vo.id},'{$vo.title}')" class="ml-5" style="text-decoration:none">{$vo.id|getNewTitle}</a></td>
+                <td>
+                <style type="text/css">
+                    .select_color_0{color:red;}
+                    .select_color_1{color:#429842;}
+                    div.layui-layer-prompt input{width: 95% !important;}
+                </style>
+                <select class="select_color_{$vo.status}" name="status" data-id="{$vo.id}">
+                <foreach name="statusArr" item="items" key="key">
+                <option value="{$key}" <if condition="$key eq $vo.status && $vo.status neq ''"> selected </if> class="select_color_{$key}">{$items}</option>
+                </foreach>
+                </select>   
+                </td>
+        <if condition="$Think.get.pid eq 1">
+                <td>
+                <select class="select_color_{$vo.is_recommend}" name="is_recommend" data-id="{$vo.id}">
+                <foreach name="isRecommend" item="items" key="key">
+                <option value="{$key}" <if condition="$key eq $vo.is_recommend && $vo.is_recommend neq ''"> selected </if> class="select_color_{$key}">{$items}</option>
+                </foreach>
+                </select>   
+                </td>
+        </if>
+                <td>{$vo.add_time|date="Y-m-d H:i:s",###}</td>
+                <td>{$vo.sort}</td>
+                <td class="td-manage">
+                    <a title="预览" href="/show/index/id/{$vo.id}.html" target="_blank" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe725;</i></a>
+                    <a title="排序" href="javascript:;" onclick="sort({$vo.id},'{$vo.sort}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe675;</i></a>
+                    <a title="编辑" href="javascript:;" onClick="show_quan('列表页 - {$Think.get.title}数据编辑','/Admin/{$Think.CONTROLLER_NAME}/listsAdd?pid={$dataInfo.id}&id={$vo.id}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+                    <a title="删除" href="javascript:;" onclick="del({$vo.id})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+                </td>
+            </tr>
+            </volist>
+        </tbody>
+    </table>
+    <!-- 分页开始 -->
+    <tr class="content">
+         <td colspan="3" bgcolor="#FFFFFF"><div class="pages mt-5">{$page}</div></td>  
+    </tr>
+    <!-- 分页结束 -->
+</div>
+<!-- 公共js文件 -->
+<include file="Public/js" />
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLIC_ADMIN__/plugins/My97DatePicker/4.8/WdatePicker.js"></script> 
+<script>
+/*增加/编辑-全屏窗口*/
+function show_quan(title,url){
+    var index = layer.open({
+        type: 2,
+        title: title,
+        content: url
+    });
+    layer.full(index);
+}
+
+$('select[name=status]').each(function(){
+    $(this).change(function () {
+        var id = $(this).attr('data-id');
+        var status = $(this).val();
+        if (status == 0) {$(this).css('color','red');}
+        else{$(this).css('color','#429842');}
+        $.ajax({
+            type: 'POST',
+            url: '{:U("status")}', 
+            data:{id:id,status:status},
+            dataType: 'json',
+            success:function(result){
+                if(result=='OK'){
+                    layer.msg('操作成功',{icon:1,time:1000});
+                }else{
+                    layer.alert(result, {icon: 2,title :'错误提示'});
+                }
+            },
+            error:function(data) {
+                console.log(data.msg);
+            },
+        });     
+    });
+});
+
+$('select[name=is_recommend]').each(function(){
+    $(this).change(function () {
+        var id = $(this).attr('data-id');
+        var status = $(this).val();
+        var pid =  $('input[name="pid"]').val();
+        if (status == 0) {$(this).css('color','red');}
+        else{$(this).css('color','#429842');}
+        $.ajax({
+            type: 'POST',
+            url: '{:U("isRecommend")}', 
+            data:{id:id,status:status,pid:pid},
+            dataType: 'json',
+            success:function(result){
+                if(result=='OK'){
+                    layer.msg('操作成功',{icon:1,time:1000});
+                }else{
+                    layer.alert(result, {icon: 2,title :'错误提示'});
+                }
+            },
+            error:function(data) {
+                console.log(data.msg);
+            },
+        });     
+    });
+});
+
+//排序修改
+function sort(id,val){
+    layer.prompt({value:val,title: '请输入数值，数值越大排序越前', formType: 0},function(sort, index){
+          layer.close(index);
+        layer.msg('正在修改', {icon: 16});
+        $.ajax({
+            type: 'POST',
+            url: '{:U("sort")}', 
+            data:{id:id,sort:sort},
+            dataType: 'json',
+            success:function(result){
+                if(result=='OK'){
+                    layer.msg('操作成功',{icon:1,time:1000});
+                    setTimeout("location.reload()",1000);
+                }else{
+                    layer.alert(result, {icon: 2,title :'错误提示'});
+                }
+            },
+            error:function(data) {
+                console.log(data.msg);
+            },
+        });     
+    });
+}
+
+//标题修改
+function myTitle(id,val){
+    layer.prompt({area: ['50%', '165px'],value:val,title: '信息标题', formType: 0},function(title, index){
+          layer.close(index);
+        layer.msg('正在修改', {icon: 16});
+        $.ajax({
+            type: 'POST',
+            url: '{:U("title")}', 
+            data:{id:id,title:title},
+            dataType: 'json',
+            success:function(result){
+                if(result=='OK'){
+                    layer.msg('操作成功',{icon:1,time:1000});
+                    setTimeout("location.reload()",1000);
+                }else{
+                    layer.alert(result, {icon: 2,title :'错误提示'});
+                }
+            },
+            error:function(data) {
+                console.log(data.msg);
+            },
+        });     
+    });
+}
+//删除
+function del(id){
+    layer.confirm('确认要删除该条内容吗？',function(index){
+        $.ajax({
+            type: 'POST',
+            url: '{:U(delete)}', 
+            data:{id:id},
+            dataType: 'json',
+            success:function(result){
+                if(result=='OK'){
+                    layer.msg('已删除',{icon:1,time:1000});
+                    setTimeout("location.reload()",1000);
+                }else{
+                    layer.alert(result, {icon: 2,title :'错误提示'});
+                }
+            },
+            error:function(data) {
+                console.log(data.msg);
+            },
+        });     
+    });
+}
+
+//全部选中/取消
+function check_del() {
+     $("[name='ids[]']:checkbox").each(function() {
+        console.log(this.checked);
+        this.checked = !this.checked//this指当前的html对象
+    });
+}
+// 全部删除
+function delAll(){
+    var arrChk=$("input[name='ids[]']:checked");
+    var ids = '';
+    // 遍历得到每个checkbox的value值并组合
+    for (var i=0;i<arrChk.length;i++)
+    {
+         ids += arrChk[i].value+',';
+    }
+    // alert(ids);
+    if (!ids) {
+        layer.alert("请选择要删除的选项", {icon: 2,title :'错误提示'});
+        return false;
+    }
+    // alert(ids);return;
+    layer.confirm('确定要全部删除吗？', {
+      btn: ['确定','取消']
+    }, function(){
+      $.post("{:U('delAll')}",{'ids':ids},function(result){
+        if(result=='OK'){
+            layer.msg('已删除',{icon:1,time:1000});
+            setTimeout("location.reload()",1000);
+        }else{
+            layer.alert(result, {icon: 2,title :'错误提示'});
+        }
+      },'json');
+    });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<include file="Public/header" />
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 权限管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<form>
+		<if condition="$pid gt 0">
+			<div class="cl pd-5 bg-1 bk-gray "><span class="r"><a class="btn btn-default radius" onclick="back({$backid});return false;">返回上级</a></span></div>
+		</if>
+		<input type="hidden" name="pid" value="{$pid}">
+		<table class="table table-border table-bordered table-bg">
+			<thead>
+				<tr class="text-c">
+					<th width="40">ID</th>
+					<th width="40">排序</th>
+					<th width="100">菜单名称</th>
+					<th width="100">菜单图标</th>
+					<th width="100">controller</th>
+					<th width="100">method</th>
+					<th width="40">是否隐藏</th>
+					<th width="40">是否禁用</th>
+					<th width="100">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+			<volist name="data.lists" id="vo">
+					<tr class="text-c">
+						<td>{$vo.mid}</td>
+						<td><input type="text"  class="input-text" name="ords[{$vo.mid}]" value="{$vo.ord}"></td>
+						<td><input type="text" class="input-text" name="titles[{$vo.mid}]" value="{$vo.title}"></td>
+						<td><input type="text" class="input-text" name="icons[{$vo.mid}]" value="{$vo.icon}"></td>
+						<td><input type="text" class="input-text" name="controllers[{$vo.mid}]" value="{$vo.controller}"></td>
+						<td><input type="text" class="input-text" name="methods[{$vo.mid}]" value="{$vo.method}"></td>
+						<td><input type="checkbox" lay-skin="primary" name="ishiddens[{$vo.mid}]" title="隐藏" <if condition="$vo.ishidden == 1">checked</if> value=1></td>
+						<td><input type="checkbox" lay-skin="primary" name="status[{$vo.mid}]" title="禁用"  <if condition="$vo.status == 1">checked</if> value=1></td>
+						<td><a href="javascript:;" onclick="child({$vo.mid});return false;" class="btn btn-primary radius">                 子菜单</a></td>
+					</tr>
+				</volist>
+					<tr class="text-c">
+						<td></td>
+						<td><input type="text" class="input-text" name="ords[0]"></td>
+						<td><input type="text" class="input-text" name="titles[0]"></td>
+						<td><input type="text" class="input-text" name="icons[0]"></td>
+						<td><input type="text" class="input-text" name="controllers[0]"></td>
+						<td><input type="text" class="input-text" name="methods[0]"></td>
+						<td><input type="checkbox" lay-skin="primary" name="ishiddens[0]" title="隐藏" value=1></td>
+						<td><input type="checkbox" lay-skin="primary" name="status[0]" title="禁用" value=1></td>
+						<td></td>
+					</tr>
+			</tbody>
+		</table>
+	</form>
+	<button class="btn btn-success" style="margin:10px 0px;" onclick="save()">保存</button>
+</div>
+<include file="Public/js" />
+<script type="text/javascript">
+	// layui.use(['layer','form'],function(){
+	// 	$ = layui.jquery;
+	// 	layer = layui.layer;
+	// 	form = layui.form;
+	// });
+	
+	// 子菜单
+	function child(pid){
+		window.location.href="/Admin/Menu/index?pid="+pid;
+	}
+
+	// 返回上一级
+	function back(pid){
+		window.location.href="/Admin/Menu/index?pid="+pid;
+	}
+
+	// 保存
+	function save(){
+		layer.msg('正在保存...', {icon: 16});
+		$.post('/Admin/menu/save',$('form').serialize(),function(res){
+			if(res.code>0){
+				layer.alert(res.msg,{'icon':2});
+			}else{
+				layer.msg(res.msg,{'icon':1});
+				setTimeout(function(){window.location.reload();},1000);
+			}
+		},'json');
+	}
+</script>
+</body>
+</html>

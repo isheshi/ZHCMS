@@ -1,0 +1,9 @@
+<script>
+	window.onerror=function(){return true}
+</script>
+<!--[if IE 6]>
+<SCRIPT src="js/iepng.js"></SCRIPT>
+<SCRIPT>
+DD_belatedPNG.fix('div,img,span,li,dt,a,h4')
+</SCRIPT>
+<![endif]-->

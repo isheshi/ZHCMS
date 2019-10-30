@@ -1,0 +1,62 @@
+<include file="Public/header" />
+<div class="page-container">
+	<p class="f-20 text-success">欢迎使用ZHCMS<span class="f-14">管理后台</span>！</p>
+	<p>欢迎回来：<?php echo $_SESSION["admin_username"];?> 当前登录IP：<?php echo $_SERVER['REMOTE_ADDR'];?> </p>
+	<p>上次登录IP：<?php echo $_SESSION["login_ip"];?>  上次登录时间：<?php echo $_SESSION["login_time"];?></p>
+
+	<table class="table table-border table-bordered table-bg mt-20">
+		<thead>
+			<tr>
+				<th colspan="2" scope="col">服务器信息</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th width="30%">授权域名</th>
+				<td><span id="lbServerName"><?php echo $_SERVER["HTTP_HOST"];?></span></td>
+			</tr>
+			<tr>
+				<td>服务器IP地址</td>
+				<td><?php echo GetHostByName($_SERVER['SERVER_NAME']);?></td>
+			</tr>
+			<tr>
+				<td>服务器语言</td>
+				<td><?php echo $_SERVER['HTTP_ACCEPT_LANGUAGE'];?></td>
+			</tr>
+			<tr>
+				<td>服务器端口 </td>
+				<td><?php echo $_SERVER['SERVER_PORT'];?></td>
+			</tr>
+			<tr>
+				<td>服务器PHP版本 </td>
+				<td><?php echo PHP_VERSION;?></td>
+			</tr>
+			<tr>
+				<td>PHP运行模式 </td>
+				<td><?php echo php_sapi_name();?></td>
+			</tr>
+			<tr>
+				<td>服务器操作系统 </td>
+				<td><?php echo php_uname('s');?></td>
+			</tr>
+			<tr>
+				<td>Zend版本 </td>
+				<td><?php echo Zend_Version();?></td>
+			</tr>
+			<tr>
+				<td>服务器当前时间 </td>
+				<td><?php echo date("Y-m-d H:i:s",time());?></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<footer class="footer mt-20">
+	<div class="container">
+		<p>
+			Copyright &copy;2019 www.jhzhihui.com All Rights Reserved.<br>
+			本系统由<a href="https://www.jhzhihui.com" target="_blank" title="ZHCMS">金航智挥</a>提供技术支持</p>
+	</div>
+</footer>
+<include file="Public/js" />
+</body>
+</html>

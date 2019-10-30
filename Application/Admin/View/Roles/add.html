@@ -1,0 +1,101 @@
+<include file="Public/header" />
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal" id="form-admin-role-add">
+		<input type="hidden" name="gid" value="{$role.gid}">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$role.title}" placeholder="" id="title" name="title">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">备注：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$role.desc}" placeholder="" id="desc" name="desc">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">权限菜单：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+			  <volist name="menus" id="vo">
+				<dl class="permission-list">
+					<dt>
+						<label>
+					<input type="checkbox" name="menu[{$vo.mid}]" lay-skin="primary" title="{$vo.title}" <?php if(isset($role['rights']) && $role['rights'] && in_array($vo['mid'],$role['rights'])){ echo checked; }?>>&nbsp;{$vo.title}
+							</label>
+					</dt>
+					<dd>
+						<dl class="cl permission-list2">
+							<dd>
+							  <volist name="vo.children" id="cvo">
+								<label class="">
+					<input type="checkbox" name="menu[{$cvo.mid}]" lay-skin="primary" title="{$cvo.title}" 
+					<?php if(isset($role['rights']) && $role['rights'] && in_array($cvo['mid'],$role['rights'])){ echo checked; }?>>&nbsp;{$cvo.title}
+									</label>
+							  </volist>
+							</dd>
+						</dl>
+					</dd>
+				</dl>
+			  </volist>
+			</div>
+		</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+			<button  onClick="save();return false;" class="btn btn-success radius" id="admin-role-save" name="admin-role-save"><i class="icon-ok"></i> 确定</button>
+		</div>
+	</div>
+	</form>
+</article>
+
+<include file="Public/js" />
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLIC_ADMIN__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__PUBLIC_ADMIN__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__PUBLIC_ADMIN__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(function(){
+	$(".permission-list dt input:checkbox").click(function(){
+		$(this).closest("dl").find("dd input:checkbox").prop("checked",$(this).prop("checked"));
+	});
+	$(".permission-list2 dd input:checkbox").click(function(){
+		var l =$(this).parent().parent().find("input:checked").length;
+		var l2=$(this).parents(".permission-list").find(".permission-list2 dd").find("input:checked").length;
+		if($(this).prop("checked")){
+			$(this).closest("dl").find("dt input:checkbox").prop("checked",true);
+			$(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",true);
+		}
+		else{
+			if(l==0){
+				$(this).closest("dl").find("dt input:checkbox").prop("checked",false);
+			}
+			if(l2==0){
+				$(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",false);
+			}
+		}
+	});
+});
+</script>
+<script type="text/javascript">
+	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	function save(){
+		var id = parseInt($('input[name="gid"]').val());//获取管理员id，以改变操作反馈提示
+		var admin_title;
+		if (id>0) { admin_title = '编辑'; }
+		else{ admin_title = '添加'; }
+		layer.msg('正在'+admin_title+'...', {icon: 16});
+		$.post('{:U(save)}',$('form').serialize(),function(result){
+			if(result=='OK'){
+				parent.layer.msg('角色'+admin_title+'成功',{icon:1,time:1000});
+				parent.setTimeout("location.reload()",1000);
+				parent.layer.close(index);
+			}else{
+				layer.msg(result,{'icon':2});
+			}
+		},'json');
+	}
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

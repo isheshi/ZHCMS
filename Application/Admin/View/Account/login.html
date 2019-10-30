@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>后台登录</title>
+	<meta name="keywords" content="后台登录">
+	<link href="__PUBLIC_ADMIN__/static/css/style.css" rel="stylesheet" type="text/css">
+	<link href="__PUBLIC_ADMIN__/plugins/layer/2.4/skin/layer.css" rel="stylesheet" type="text/css">
+</head>
+<body class="login">
+<div class="login_m">
+
+	<div style="color:gray;text-align:center; margin:30px 0px;">
+		<h2>后台管理</h2>
+	</div>
+	<div class="login_boder mt-10">
+		<div class="login_padding">
+			<h2>用户名</h2>
+			<label>
+				<input type="text" id="username" class="txt_input txt_input2" name="username" onfocus="if (value ==&#39;用户名&#39;){value =&#39;&#39;}" onblur="if (value ==&#39;&#39;){value=&#39;用户名&#39;}" value="用户名">
+			</label>
+			<h2>密码</h2>
+			<label>
+				<input type="password" id="password" class="txt_input" name="password" onfocus="if (value ==&#39;******&#39;){value =&#39;&#39;}" onblur="if (value ==&#39;&#39;){value=&#39;******&#39;}" value="******">
+			</label>
+			<div class="rem_sub" style="margin-top: 20px;">
+				<div class="rem_sub_l">
+					<input type="checkbox" id="rmbUser" onchange="saveUserInfo()">
+					<label for="checkbox">记住密码</label>
+				</div>
+				<label>
+					<input type="button" class="sub_button" onclick="login()" value="登录" style="opacity: 0.7;">
+				</label>
+			</div>
+		</div>
+	</div>
+</div>
+<br />
+<br />
+<p align="center">Copyright &copy; ZHCMS 2019 </p>
+<script type="text/javascript" src="__PUBLIC_ADMIN__/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC_ADMIN__/static/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="__PUBLIC_ADMIN__/static/js/layer.js"></script>
+<script>
+//初始化页面时验证是否记住了密码
+$(document).ready(function() {
+	if ($.cookie("rmbUser") == "true") {
+		$("#rmbUser").attr("checked","checked");
+		$("#username").val($.cookie("userName"));
+		$("#password").val($.cookie("passWord"));
+	}
+});
+//保存用户信息
+function saveUserInfo() {
+	if ($("#rmbUser").attr("checked") == "checked") {
+		var userName = $("#username").val();
+		var passWord = $("#password").val();
+		$.cookie("rmbUser", "true", { expires: 7 }); // 存储一个带7天期限的 cookie
+		$.cookie("userName", userName, { expires: 7 }); // 存储一个带7天期限的 cookie
+		$.cookie("passWord", passWord, { expires: 7 }); // 存储一个带7天期限的 cookie
+	}else{
+		$.cookie("rmbUser", "false", { expires: -1 });
+		$.cookie("userName", '', { expires: -1 });
+		$.cookie("passWord", '', { expires: -1 });
+	}
+}
+function login(){
+	layer.msg('正在登录...', {icon: 16,time:0});
+	var username=$('#username').val();
+	var password=$('#password').val();
+	$.ajax({
+		type:'post',
+		url:"{:U('login')}",
+		data:{username:username,password:password},
+		dataType:'json',
+		success:function(result){
+			if(result=='OK'){
+				layer.msg('登录成功，正在跳转...', {icon: 16});
+				location.href = "/Admin/Index/index.html";
+			}else{
+				layer.alert(result, {icon: 2,title :'登录错误提示'});
+			}
+		}
+	});
+}
+
+</script>
+</body>
+</html>

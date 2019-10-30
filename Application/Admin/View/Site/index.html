@@ -1,0 +1,177 @@
+<include file="Public/header" />
+
+
+<title>基本设置</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+	系统管理
+	<span class="c-gray en">&gt;</span>
+	配置列表
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="page-container">
+	<form class="form form-horizontal" id="form">
+		<div id="tab-system" class="HuiTab">
+			<div class="tabBar cl">
+				<span>基本信息设置</span>
+				<span>联系方式</span>
+				<span>SEO设置</span>	
+			</div>
+			
+			<div style="width: 100%;height: 5px;"></div>
+			<div class="tabCon">
+				<volist name="data" id="vo">
+					<if  condition="$vo['confCate'] eq 0">
+						<div class="row cl">
+							<label class="form-label col-xs-4 col-sm-2">
+								<span class="c-red">*</span>
+								{$vo.zn_title}：</label>
+							<div class="formControls col-xs-8 col-sm-9">
+								<if condition="$vo['conf'] eq 0">
+									<input name="{$vo.id}" type="text" id="website-title" value="{$vo.default}" class="input-text">
+								</if>
+								<if condition="$vo['conf'] eq 1">
+									<textarea class="textarea"  name="{$vo.id}" id="">{$vo.default}</textarea>
+								</if>
+								<if condition="$vo['conf'] eq 2">
+									<?php
+										$option = stringIntoAnArray($vo['option']);
+									 ?>
+									 <span class="select-box"><select name="{$vo.id}" class="select">
+										<foreach name="option" item="items">
+											<option value="{$items}" <if condition="$items eq $vo['optionKey']"> selected </if>>{$items}</option>
+										</foreach>
+									</select></span>
+								</if>
+								<if condition="$vo['conf'] eq 3">
+									<!-- html标签转义 -->
+									{$vo.default|htmlTagsToEscape}
+								</if>
+							</div>
+						</div>
+					</if>
+				</volist>
+			</div>
+			
+			<div class="tabCon">
+				<volist name="data" id="vo">
+					<if  condition="$vo['confCate'] eq 1">
+						<div class="row cl">
+							<label class="form-label col-xs-4 col-sm-2">
+								<span class="c-red">*</span>
+								{$vo.zn_title}：</label>
+							<div class="formControls col-xs-8 col-sm-9">
+								<if condition="$vo['conf'] eq 0">
+									<input name="{$vo.id}" type="text" id="website-title" value="{$vo.default}" class="input-text">
+								</if>
+								<if condition="$vo['conf'] eq 1">
+									<textarea class="textarea"  name="{$vo.id}" id="">{$vo.default}</textarea>
+								</if>
+								<if condition="$vo['conf'] eq 2">
+									<?php
+										$option = stringIntoAnArray($vo['option']);
+										?>
+										<span class="select-box"><select name="{$vo.id}" class="select">
+										<foreach name="option" item="items">
+											<option value="{$items}" <if condition="$items eq $data['optionKey']"> selected </if>>{$items}</option>
+										</foreach>
+									</select></span>
+								</if>
+								<if condition="$vo['conf'] eq 3">
+									<!-- html标签转义 -->
+									{$vo.default|htmlTagsToEscape}
+								</if>
+							</div>
+						</div>
+					</if>
+				</volist>
+			</div>
+
+			<div class="tabCon">
+				<volist name="data" id="vo">
+					<if  condition="$vo['confCate'] eq 2">
+						<div class="row cl">
+							<label class="form-label col-xs-4 col-sm-2">
+								<span class="c-red">*</span>
+								{$vo.zn_title}：</label>
+							<div class="formControls col-xs-8 col-sm-9">
+								<if condition="$vo['conf'] eq 0">
+									<input name="{$vo.id}" type="text" id="website-title" value="{$vo.default}" class="input-text">
+								</if>
+								<if condition="$vo['conf'] eq 1">
+									<textarea class="textarea"  name="{$vo.id}" id="">{$vo.default}</textarea>
+								</if>
+								<if condition="$vo['conf'] eq 2">
+									<?php
+										$option = stringIntoAnArray($vo['option']);
+										?>
+										<span class="select-box"><select name="{$vo.id}" class="select">
+										<foreach name="option" item="items">
+											<option value="{$items}" <if condition="$items eq $data['optionKey']"> selected </if>>{$items}</option>
+										</foreach>
+									</select></span>
+								</if>
+								<if condition="$vo['conf'] eq 3">
+									<!-- html标签转义 -->
+									{$vo.default|htmlTagsToEscape}
+								</if>
+							</div>
+						</div>
+					</if>
+				</volist>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button onClick="save();" class="btn btn-primary radius" type="button">&nbsp;&nbsp;保存&nbsp;&nbsp;</button>
+				<button class="btn btn-default radius" type="reset">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+<!-- 公共js文件 -->
+<include file="Public/js" />
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLIC_ADMIN__/plugins/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__PUBLIC_ADMIN__/plugins/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__PUBLIC_ADMIN__/plugins/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__PUBLIC_ADMIN__/plugins/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(function(){
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	$("#tab-system").Huitab({
+		index:0
+	});
+});
+// 保存
+function save(){
+    $.ajax({
+        type:'post',
+        url:"{:U('save')}", 
+        data:$("#form").serialize(),
+        dataType:'json',
+        success:function(result){
+            if(result=='OK'){
+                layer.msg('配置列表数据保存成功',{icon:1,time:1000});
+                setTimeout("location.reload()",1000);
+            }else{
+                layer.alert(result, {icon: 2,title :'错误提示'});
+            }
+        },
+		error:function(){
+			console.log($("#form").serialize());
+		}
+    });
+    return false; 
+}
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

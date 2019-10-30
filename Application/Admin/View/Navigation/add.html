@@ -1,0 +1,90 @@
+<include file="Public/header"/>
+<article class="page-container">
+    <form class="form form-horizontal" id="form">
+        <input type="hidden" name="id" value="{$data.id}">
+
+        <!-- 所属导航 -->
+      <!--   <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2"> 所属导航：</label>
+            <div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+            <select name="pid" class="select">
+                    <option value="">请选择所属导航</option>
+                      <volist name="navigation" id="vo">
+                      <option value="{$vo.id}" <if condition="($vo.id eq $data['pid'])">selected</if> >{$vo.title}</option>
+                        </volist>
+            </select>
+                </span> </div>
+        </div> -->
+
+        <!-- 文本字段 -->
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2">
+            <span class="c-red">*</span> 导航名称：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <input type="text" class="input-text" name="title" value="{$data.title}">
+            </div>
+        </div>
+
+        <!-- 文本字段 -->
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2">
+            <span class="c-red">*</span> 链接地址：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <input type="text" class="input-text" name="url" value="{$data.url}">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2">是否推荐：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <input type="radio" name="is_recommend" value="0" <if condition="($data.is_recommend neq 1)"> checked </if> > 否
+                <input type="radio" name="is_recommend" value="1" <if condition="($data.is_recommend eq 1)" > checked </if> > 是
+                <span style="color:indianred">（如果是推荐，则在首页显示，首页只显示九个导航）</span>
+              </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2">排序值：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <input type="text" class="input-text" value="{$data.sort}" placeholder="" name="sort">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-9 col-sm-9 col-xs-offset-2 col-sm-offset-2">
+                <button onClick="save()" class="btn btn-secondary radius" type="button"> 提 交</button>
+            </div>
+        </div>
+	</form>
+</div>
+<!-- 公共js文件 -->
+<include file="Public/js" />
+<!--请在下方写此页面业务相关的脚本-->
+<script>
+//提交 
+function save(){
+   var id = parseInt($('input[name="id"]').val());//获取id，以改变操作反馈提示
+    var admin_title;
+    if (id>0) { admin_title = '编辑'; }
+    else{ admin_title = '添加'; }
+    layer.msg('正在'+admin_title+'...', {icon: 16,time:1000});
+    $.ajax({
+        type:'post',
+        url:"{:U('save')}", 
+        data:$("#form").serialize(),
+        dataType:'json',
+        success:function(result){
+            if(result=='OK'){
+                parent.layer.msg('导航'+admin_title+'成功',{icon:1,time:1000});
+                parent.setTimeout("location.reload()",1000);
+                parent.layer.close(index);
+            }else{
+                layer.alert(result, {icon: 2,title :'错误提示'});
+            }
+        }
+    });
+    return false; 
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<include file="Public/header"/>
+<link href="__PUBLIC_ADMIN__/plugins/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+<article class="page-container">
+    <form class="form form-horizontal" id="form">
+        <input type="hidden" name="id" value="{$data.id}">
+
+        <!-- 文本字段 -->
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2">
+            <span class="c-red">*</span> 单页名称：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <input type="text" class="input-text" name="title" value="{$data.title}">
+            </div>
+        </div>
+
+        <!-- 所属导航 -->
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span> 所属导航：</label>
+            <div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+            <select name="nav_id" class="select">
+                    <option value="">请选择所属导航</option>
+                      <volist name="navigation" id="vo">
+                      <option value="{$vo.id}" <if condition="($vo.id eq $data['nav_id'])">selected</if> >{$vo.title}</option>
+                        </volist>
+            </select>
+                </span> </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2">编辑器：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                  开启<input name="content_used" type="radio" value="1" {$data['content_used']?'checked':''}/>
+                  关闭<input name="content_used" type="radio" value="0" {$data['content_used']?'':'checked'}/>
+              </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2">图片：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                  开启<input name="pic_used" type="radio" value="1" {$data['pic_used']?'checked':''}/>
+                  关闭<input name="pic_used" type="radio" value="0" {$data['pic_used']?'':'checked'}/>
+              </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2">简介：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                   开启<input name="introduce_used" type="radio" value="1" {$data['introduce_used']?'checked':''}/>
+                   关闭<input name="introduce_used" type="radio" value="0" {$data['introduce_used']?'':'checked'}/>
+              </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2">优化：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                    开启<input name="is_seo" type="radio" value="1" {$data['is_seo']?'checked':''}/>
+                    关闭<input name="is_seo" type="radio" value="0" {$data['is_seo']?'':'checked'}/>
+              </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2">链接地址：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                    开启<input name="url_used" type="radio" value="1" {$data['url_used']?'checked':''}/>
+                    关闭<input name="url_used" type="radio" value="0" {$data['url_used']?'':'checked'}/>
+              </div>
+        </div>
+        
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2">排序值：</label>
+            <div class="formControls col-xs-9 col-sm-9">
+                <input type="text" class="input-text" value="{$data.sort}" placeholder="" name="sort">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-9 col-sm-9 col-xs-offset-2 col-sm-offset-2">
+                <button onClick="save()" class="btn btn-secondary radius" type="button"> 提 交</button>
+            </div>
+        </div>
+	</form>
+</div>
+
+<!-- 公共js文件 -->
+<include file="Public/js" />
+<!--请在下方写此页面业务相关的脚本-->
+<script>
+//提交 
+function save(){
+   var id = parseInt($('input[name="id"]').val());//获取id，以改变操作反馈提示
+    var admin_title;
+    if (id>0) { admin_title = '编辑'; }
+    else{ admin_title = '添加'; }
+    layer.msg('正在'+admin_title+'...', {icon: 16,time:1000});
+    $.ajax({
+        type:'post',
+        url:"{:U('save')}", 
+        data:$("#form").serialize(),
+        dataType:'json',
+        success:function(result){
+            if(result=='OK'){
+                parent.layer.msg('单页'+admin_title+'成功',{icon:1,time:1000});
+                parent.setTimeout("location.reload()",1000);
+                parent.layer.close(index);
+            }else{
+                layer.alert(result, {icon: 2,title :'错误提示'});
+            }
+        }
+    });
+    return false; 
+}
+</script>
+</body>
+</html>

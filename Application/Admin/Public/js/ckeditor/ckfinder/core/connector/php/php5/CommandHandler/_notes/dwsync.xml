@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="CommandHandlerBase.php" server="web.webok.net" local="130699370322589294" remote="130734475800000000" />
+<file name="CopyFiles.php" server="web.webok.net" local="130699370319464294" remote="130734475800000000" />
+<file name="CreateFolder.php" server="web.webok.net" local="130699370357745544" remote="130734475800000000" />
+<file name="DeleteFile.php" server="web.webok.net" local="130699370353683044" remote="130734475800000000" />
+<file name="DeleteFolder.php" server="web.webok.net" local="130699370349776794" remote="130734475800000000" />
+<file name="DownloadFile.php" server="web.webok.net" local="130699370345714294" remote="130734475800000000" />
+<file name="FileUpload.php" server="web.webok.net" local="130707997106875000" remote="130734475800000000" />
+<file name="GetFiles.php" server="web.webok.net" local="130699370336651794" remote="130734475800000000" />
+<file name="GetFolders.php" server="web.webok.net" local="130699370332589294" remote="130734475800000000" />
+<file name="Init.php" server="web.webok.net" local="130699370328526794" remote="130734475800000000" />
+<file name="LoadCookies.php" server="web.webok.net" local="130699370325558044" remote="130734475800000000" />
+<file name="MoveFiles.php" server="web.webok.net" local="130699370386026794" remote="130734475800000000" />
+<file name="QuickUpload.php" server="web.webok.net" local="130699370380870544" remote="130734475800000000" />
+<file name="RenameFile.php" server="web.webok.net" local="130699370375870544" remote="130734475800000000" />
+<file name="RenameFolder.php" server="web.webok.net" local="130699370370870544" remote="130734475800000000" />
+<file name="Thumbnail.php" server="web.webok.net" local="130699370366964294" remote="130734475800000000" />
+<file name="XmlCommandHandlerBase.php" server="web.webok.net" local="130699370361808044" remote="130734475800000000" />
+</dwsync>

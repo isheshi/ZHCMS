@@ -1,0 +1,47 @@
+<include file="Public/header"/>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 广告管理 <span class="c-gray en">&gt;</span> {$title} <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<!-- <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l">
+		<a class="btn btn-primary radius" onclick="show_quan('添加广告位数据','/Admin/{$Think.CONTROLLER_NAME}/add?pid={$pid}')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加广告位数据</a>
+		</span><span class="r">共有数据：<strong>{$count}</strong> 条</span> </div> 
+	添加广告位数据和分页没做，到这时的我懒得做，这个你可以自行补充
+	如需增加一条广告位，只需要在数据库img表中增加一条数据并在数据中填写以下三个字段的值保存即可
+  `index_title` char(50) NOT NULL DEFAULT '' COMMENT '位置名称',
+  `index_desc` char(30) NOT NULL DEFAULT '' COMMENT '位置说明',
+  `index_main` char(50) NOT NULL DEFAULT '' COMMENT '展现形式',
+	-->
+	<table class="table table-border table-bordered table-bg table-hover table-striped">
+		<thead>
+			<tr class="text-c">
+				<th width="50">ID</th>
+				<th width="50">位置名称</th>
+				<th width="50">位置说明</th>
+				<th width="50">展现形式</th>
+				<th width="50">图片数量</th>
+				<th width="50">管理操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<empty name="data"><tr class="text-c"><td colspan="50">还没有内容哦，赶紧添加吧！</td></tr></empty>
+			<volist name="data" id="vo">
+			<tr class="text-c">
+				<td>{$vo.id}</td>
+                <td><a href="/Admin/{$Think.CONTROLLER_NAME}/lists?pid={$vo.id}&title={$vo.title}">{$vo.index_title}</a></td>
+                <td>{$vo.index_desc}</td>
+                <td>{$vo.index_main}</td>
+                <td>{$vo.index_num}</td>
+                <td><a href="/Admin/{$Think.CONTROLLER_NAME}/lists?pid={$vo.id}&title={$vo.title}">广告位管理</a></td>
+			</tr>
+			</volist>
+		</tbody>
+	</table>
+    <!-- 分页开始 -->
+    <tr class="content">
+         <td colspan="3" bgcolor="#FFFFFF"><div class="pages mt-5">{$page}</div></td>  
+    </tr>
+    <!-- 分页结束 -->
+</div>
+<!-- 公共js文件 -->
+<include file="Public/js" />
+</body>
+</html>

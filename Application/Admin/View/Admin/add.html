@@ -1,0 +1,82 @@
+<include file="Public/header" />
+<article class="page-container">
+	<form class="form form-horizontal" id="form">
+	<input type="hidden" name="id" value="{$admin.id}">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3">用户名</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<if condition="$admin.id gt 0" >
+				{$admin.username}
+				<input type="hidden" class="input-text" value="{$admin.username}" placeholder="" name="username">
+			<else/>
+					<input type="text" class="input-text" value="" placeholder="" name="username">
+			</if>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3">初始密码：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="password" class="input-text" placeholder="<if condition="$admin.id gt 0" >
+			不修改密码请留空
+			<else/>密码
+			</if>" name="password">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3">确认密码：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="password" class="input-text"  placeholder="<if condition="$admin.id gt 0" >
+			不修改密码请留空
+			<else/>确认初始密码
+			</if>" name="password2">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3">角色</label>
+		<div class="formControls col-xs-8 col-sm-9"> <span class="select-box" style="width:150px;">
+			<select class="select" name="gid" size="1">
+				<volist name="data.groups" id="vo">
+                	<option value="{$vo.gid}" <if condition="$vo.gid eq $gid">selected="true"</if>>{$vo.title}</option>
+                </volist>
+			</select>
+			</span> </div>
+	</div>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+			<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+		</div>
+	</div>
+	</form>
+</article>
+
+<include file="Public/js" />
+<!--请在下方写此页面业务相关的脚本--> 
+<script type="text/javascript">
+var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+$('#form').submit(function() {
+	var id = parseInt($('input[name="id"]').val());//获取管理员id，以改变操作反馈提示
+	var admin_title;
+	if (id>0) { admin_title = '编辑'; }
+	else{ admin_title = '添加'; }
+	layer.msg('正在'+admin_title+'...', {icon: 16});
+	$.ajax({
+		type:'post',
+		url:"{:U('save')}", 
+		data:$("#form").serialize(),
+		dataType:'json',
+		success:function(result){
+			if(result=='OK'){
+				parent.layer.msg('管理员'+admin_title+'成功',{icon:1,time:1000});
+				parent.setTimeout("location.reload()",1000);
+				parent.layer.close(index);
+			}else{
+				layer.alert(result, {icon: 2,title :'错误提示'});
+			}
+		}
+	});
+	return false; 
+});
+</script> 
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

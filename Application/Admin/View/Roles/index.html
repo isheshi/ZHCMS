@@ -1,0 +1,65 @@
+<include file="Public/header" />
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 角色管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a class="btn btn-primary radius" href="javascript:;" onclick="show_add('添加角色','add.html','800')"><i class="Hui-iconfont">&#xe600;</i> 添加角色</a> </span> <span class="r">共有数据：<strong>{$data.count}</strong> 条</span> </div>
+	<table class="table table-border table-bordered table-hover table-bg">
+		<thead>
+			<tr class="text-c">
+				<th width="40">ID</th>
+				<th width="200">角色名</th>
+				<th>用户列表</th>
+				<th width="300">描述</th>
+				<th width="70">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<volist name="data.roles" id="vo">
+				<tr class="text-c">
+					<td>{$vo.gid}</td>
+					<td>{$vo.title}</td>
+					<td><volist name="vo.admin_username" id="uvo" key="k" empty="暂时没有用户"><if condition="$k lt $vo['count']"><a href="#">{$uvo.username}</a>，<else/><a href="#">{$uvo.username}</a></if></volist></td>
+					<td>{$vo.desc}</td>
+					<td class="f-14"><a title="编辑" href="javascript:;" onclick="show_add('角色编辑','/Admin/{$Think.CONTROLLER_NAME}/add?gid={$vo.gid}')" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="show_del(this,{$vo.gid})" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+				</tr>
+			</volist>
+		</tbody>
+	</table>
+</div>
+<!-- 公共js文件 -->
+<include file="Public/js" />
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLIC_ADMIN__/plugins/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+/*管理员-角色-添加/编辑*/
+function show_add(title,url,w,h){
+	layer_show(title,url,w,h);
+}
+/*管理员-角色-编辑*/
+// function admin_role_edit(title,url,id,w,h){
+// 	layer_show(title,url,w,h);
+// }
+/*管理员-角色-删除*/
+function show_del(obj,gid){
+	layer.confirm('角色删除须谨慎，确认要删除吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: '{:U("delete")}',
+			dataType: 'json',
+			data:{gid:gid},
+			success:function(result){
+				if(result=='OK'){
+					layer.msg('已删除',{icon:1,time:1000});
+					setTimeout("location.reload()",1000);
+				}else{
+					layer.alert(result, {icon: 2,title :'错误提示'});
+				}
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});		
+	});
+}
+</script>
+</body>
+</html>
