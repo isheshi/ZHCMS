@@ -3,23 +3,13 @@ thinkphp3.23开发的CMS，有权限管理功能，引用了文件系统（Mysel
 
 话不多说，直接上图
 
-![1572424373275](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1572424373275.png)
-
-![1572424431378](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1572424431378.png)
-
-![1572424450857](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1572424450857.png)
-
-![1572424476400](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1572424476400.png)
-
-![1572424486166](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1572424486166.png)
-
-![1572424497979](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1572424497979.png)
-
-![1572424507293](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1572424507293.png)
-
-![1572424514310](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1572424514310.png)
-
-![1572424521522](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1572424521522.png)
-
-![1572424527617](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1572424527617.png)
-
+![1.png](https://github.com/isheshi/ZHCMS/blob/master/src/1.png)
+![2.png](https://github.com/isheshi/ZHCMS/blob/master/src/2.png)
+![3.png](https://github.com/isheshi/ZHCMS/blob/master/src/3.png)
+![4.png](https://github.com/isheshi/ZHCMS/blob/master/src/4.png)
+![5.png](https://github.com/isheshi/ZHCMS/blob/master/src/5.png)
+![6.png](https://github.com/isheshi/ZHCMS/blob/master/src/6.png)
+![7.png](https://github.com/isheshi/ZHCMS/blob/master/src/7.png)
+![8.png](https://github.com/isheshi/ZHCMS/blob/master/src/8.png)
+![9.png](https://github.com/isheshi/ZHCMS/blob/master/src/9.png)
+![10.png](https://github.com/isheshi/ZHCMS/blob/master/src/10.png)
